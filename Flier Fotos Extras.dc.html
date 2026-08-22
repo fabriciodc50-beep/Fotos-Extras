@@ -1,0 +1,598 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,600;1,9..144,300&family=Jost:wght@300;400;500;600;700&family=Outfit:wght@200;300;400;500;600&display=swap" rel="stylesheet">
+<script src="./image-slot.js"></script>
+<style>
+  *{margin:0;padding:0;box-sizing:border-box}
+  :root,:root[data-theme="dark"]{
+    --bg:#080807;--text:#f7f3ea;--body:#d6cfc0;--muted:#a89f90;
+    --accent:#e3c68d;--accent-strong:#f0dcae;--gold-ink:#c9a25a;
+    --card:linear-gradient(168deg,#17150f,#100f0d 62%);
+    --card-warm:linear-gradient(168deg,#1a1710,#100f0d 62%);
+    --tint:rgba(247,243,234,.03);
+    --line:rgba(243,238,228,.12);--line-strong:rgba(243,238,228,.2);
+    --inset:rgba(247,243,234,.07);
+    --display:'Fraunces',serif;--body-font:'Jost',sans-serif;
+    --track:rgba(243,238,228,.16);
+    --halo1:rgba(184,148,74,.22);--halo2:rgba(184,148,74,.07);
+    --btn-bg:#0b0a09;--btn-fg:#f0dcae;--accent-ink:#f2e5c6;
+    --logo-filter:drop-shadow(0 8px 30px rgba(184,148,74,.35));
+    --pick-bg:linear-gradient(150deg,rgba(240,220,174,.24),rgba(184,148,74,.1));
+    --pick-border:rgba(240,220,174,.7);
+  }
+  :root[data-theme="light"]{
+    --bg:#f6f4ef;--text:#15140f;--body:#4a4640;--muted:#6f6a60;
+    --accent:#8a6a1f;--accent-strong:#6f5216;--gold-ink:#9d7a28;
+    --card:linear-gradient(168deg,#ffffff,#faf8f3 72%);
+    --card-warm:linear-gradient(168deg,#fffdf6,#f7f2e6 74%);
+    --tint:rgba(21,20,15,.035);
+    --line:rgba(21,20,15,.13);--line-strong:rgba(21,20,15,.22);
+    --inset:rgba(255,255,255,.95);
+    --display:'Outfit',sans-serif;--body-font:'Outfit',sans-serif;
+    --track:rgba(21,20,15,.16);
+    --halo1:rgba(184,148,74,.16);--halo2:rgba(184,148,74,.06);
+    --btn-bg:#15140f;--btn-fg:#f6efdc;--accent-ink:#5f4611;
+    --logo-filter:none;
+    --pick-bg:linear-gradient(150deg,#f4e6c4,#e6d3a4);
+    --pick-border:#9d7a28;
+  }
+  :root[data-theme="light"] em{font-style:normal;font-weight:500}
+  body{background:var(--bg);-webkit-font-smoothing:antialiased;transition:background .45s ease}
+  a{color:var(--accent);text-decoration:none}
+  a:hover{color:var(--text)}
+  input[type=range]{-webkit-appearance:none;appearance:none;background:transparent}
+  input[type=range]::-webkit-slider-runnable-track{height:5px;border-radius:3px;background:linear-gradient(90deg,rgba(184,148,74,.8),var(--track))}
+  input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;appearance:none;width:24px;height:24px;margin-top:-10px;border-radius:50%;background:linear-gradient(160deg,#f0dcae,#b8944a);border:none;cursor:pointer;box-shadow:0 0 0 1px rgba(255,255,255,.35) inset,0 6px 18px rgba(184,148,74,.45)}
+  input[type=range]::-moz-range-track{height:5px;border-radius:3px;background:linear-gradient(90deg,rgba(184,148,74,.8),var(--track))}
+  input[type=range]::-moz-range-thumb{width:24px;height:24px;border:none;border-radius:50%;background:linear-gradient(160deg,#f0dcae,#b8944a);cursor:pointer}
+  @keyframes heroDrift{from{transform:scale(1)}to{transform:scale(1.06)}}
+  @keyframes sheen{0%{transform:translateX(-120%)}100%{transform:translateX(220%)}}
+  @media (max-width:860px){.grid3{grid-template-columns:minmax(0,1fr)!important}}
+  @media (max-width:1040px){.grid4{grid-template-columns:repeat(2,minmax(0,1fr))!important}}
+  @media (max-width:620px){.grid4{grid-template-columns:minmax(0,1fr)!important}}
+</style>
+</helmet>
+
+<div style="position:relative;background:var(--bg);color:var(--text);font-family:var(--body-font);font-weight:300;line-height:1.65;min-height:100%;padding:clamp(22px,4vw,60px) clamp(16px,4vw,48px) clamp(44px,6vw,84px);background-image:radial-gradient(120% 55% at 50% -6%, var(--halo1), transparent 60%),radial-gradient(80% 40% at 100% 40%, var(--halo2), transparent 70%),radial-gradient(70% 40% at 0% 78%, var(--halo2), transparent 70%);overflow:hidden">
+
+  <div style="max-width:1180px;margin:0 auto;display:flex;flex-direction:column;gap:clamp(44px,6vw,90px)">
+
+    <div style="display:flex;justify-content:flex-end;margin-bottom:calc(-1 * clamp(44px,6vw,90px));position:relative;z-index:5">
+      <button type="button" onClick="{{ toggleTheme }}" style="{{ themeBtnStyle }}">{{ themeLabel }}</button>
+    </div>
+
+    <header style="position:relative;width:100vw;margin-left:50%;transform:translateX(-50%);margin-top:calc(-1 * clamp(22px,4vw,60px));margin-bottom:calc(-1 * clamp(24px,4vw,60px))">
+      <div style="position:relative;overflow:hidden;display:flex;flex-direction:column;align-items:center;text-align:center;gap:clamp(14px,2vw,20px);padding:clamp(30px,5vw,56px) clamp(20px,4vw,56px) clamp(70px,11vw,150px);min-height:min(90vh,860px);justify-content:flex-end;isolation:isolate">
+      <div style="position:absolute;inset:0;z-index:0;animation:heroDrift 34s ease-in-out infinite alternate;will-change:transform">
+        <image-slot id="hero-lumiar" shape="rect" fit="cover" placeholder="Arraste aqui a fotografia de destaque do estúdio"></image-slot>
+      </div>
+      <div style="position:absolute;inset:0;z-index:1;background:linear-gradient(180deg,rgba(8,8,7,.52) 0%,rgba(8,8,7,.1) 24%,rgba(8,8,7,.12) 44%,rgba(8,8,7,.7) 74%,rgba(8,8,7,.9) 88%,var(--bg) 100%);pointer-events:none"></div>
+      <img src="assets/logo-lumiar.png" alt="Lumiar Retratos &amp; Estúdio" style="position:relative;z-index:2;margin-bottom:auto;pointer-events:none;width:clamp(84px,10vw,124px);height:auto;filter:drop-shadow(0 8px 26px rgba(0,0,0,.75))">
+      <div style="position:relative;z-index:2;display:flex;flex-direction:column;align-items:center;gap:clamp(16px,2vw,22px);max-width:920px">
+        <div style="display:flex;align-items:center;gap:14px">
+          <span style="width:clamp(18px,5vw,44px);height:1px;background:linear-gradient(90deg,transparent,#f0dcae)"></span>
+          <span style="font-size:clamp(.62rem,1.5vw,.74rem);letter-spacing:.42em;text-transform:uppercase;color:#f0dcae;font-weight:500;text-shadow:0 2px 12px rgba(0,0,0,.9)">Fotografias adicionais · 2026</span>
+          <span style="width:clamp(18px,5vw,44px);height:1px;background:linear-gradient(270deg,transparent,#f0dcae)"></span>
+        </div>
+        <h1 style="color:#fffdf7;font-family:var(--display);font-weight:300;font-size:clamp(2.5rem,8.4vw,5.4rem);line-height:.94;letter-spacing:-.015em;max-width:15ch;text-shadow:0 3px 22px rgba(0,0,0,.9),0 22px 70px rgba(0,0,0,.75)">Fotos Digitais <em style="font-style:italic;background:linear-gradient(100deg,#fdf3d8,#e0bd77 52%,#fff1c9);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent">Extras</em></h1>
+        <p style="max-width:44ch;color:#efe9dc;font-size:clamp(1rem,2.3vw,1.18rem);line-height:1.55;text-shadow:0 2px 16px rgba(0,0,0,.95);text-wrap:pretty">Cada fotografia extra é um <strong style="font-weight:500;color:#fff">produto único</strong>, escolhido por você após a curadoria — e <strong style="font-weight:500;color:#f0dcae">nada do seu plano é substituído</strong>.</p>
+        <div style="display:flex;align-items:center;gap:10px;padding:9px 18px;border-radius:999px;border:1px solid rgba(240,220,174,.45);background:rgba(8,8,7,.45);backdrop-filter:blur(4px)">
+          <span style="font-size:.72rem;letter-spacing:.2em;text-transform:uppercase;color:#d9d1c0">a partir de</span>
+          <span style="font-weight:600;font-size:1.15rem;color:#f6e5b8;letter-spacing:-.01em">R$ 32</span>
+          <span style="font-size:.8rem;color:#d9d1c0">/ por imagem</span>
+        </div>
+        <div style="display:flex;flex-wrap:wrap;gap:14px;justify-content:center;margin-top:10px">
+          <a href="#calculadora" style="background:linear-gradient(160deg,#fdf0cd,#d3aa5d 55%,#a97f2e);color:#14110a;font-weight:600;letter-spacing:.16em;text-transform:uppercase;font-size:.76rem;padding:17px 32px;border-radius:999px;box-shadow:0 22px 50px -22px rgba(184,148,74,.95),inset 0 1px 0 rgba(255,255,255,.6);transition:transform .3s ease,box-shadow .3s ease" style-hover="transform:translateY(-3px);box-shadow:0 30px 60px -22px rgba(184,148,74,1),inset 0 1px 0 rgba(255,255,255,.7)">Simular meu total</a>
+          <a href="#duvidas" style="border:1px solid rgba(255,253,247,.55);color:#fffdf7;letter-spacing:.16em;text-transform:uppercase;font-size:.76rem;padding:17px 30px;border-radius:999px;background:rgba(8,8,7,.35);backdrop-filter:blur(4px);transition:background .3s ease,border-color .3s ease" style-hover="background:rgba(8,8,7,.6);border-color:#f0dcae">Perguntas frequentes</a>
+        </div>
+      </div>
+      </div>
+    </header>
+
+    <section style="display:flex;flex-direction:column;gap:clamp(20px,2.6vw,30px)">
+      <div style="text-align:center;display:flex;flex-direction:column;gap:12px;align-items:center">
+        <div style="font-size:.7rem;letter-spacing:.34em;text-transform:uppercase;color:var(--accent)">Coleções de imagens</div>
+        <h2 style="font-family:var(--display);font-weight:300;font-size:clamp(1.6rem,4.6vw,2.6rem);line-height:1.06;max-width:26ch">Quanto maior a coleção, menor o valor por imagem</h2>
+        <p style="color:var(--body);max-width:58ch;font-size:.98rem;text-wrap:pretty">A faixa se aplica ao total de extras escolhidas — e não apenas às últimas imagens adicionadas.</p>
+      </div>
+
+      <div class="grid4" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,252px),1fr));gap:clamp(14px,1.8vw,22px);align-items:stretch">
+
+        <article style="position:relative;display:flex;flex-direction:column;gap:18px;background:var(--card);border:1px solid var(--line);border-radius:20px;padding:clamp(22px,2.6vw,30px);box-shadow:inset 0 1px 0 var(--inset),0 34px 70px -46px rgba(0,0,0,.95)">
+          <div>
+            <div style="font-family:var(--display);font-size:clamp(1.2rem,2.6vw,1.45rem);font-weight:400">Imagem Avulsa</div>
+            <div style="font-size:.72rem;letter-spacing:.22em;text-transform:uppercase;color:var(--muted);margin-top:6px">1 a 9 fotos</div>
+          </div>
+          <div style="display:flex;align-items:baseline;gap:8px;flex-wrap:wrap">
+            <span style="font-weight:600;font-size:clamp(2.2rem,6vw,2.9rem);line-height:1;letter-spacing:-.02em">R$ 40</span>
+            <span style="color:var(--muted);font-size:.86rem">/ por imagem</span>
+          </div>
+          <div style="height:1px;background:linear-gradient(90deg,var(--accent),transparent)"></div>
+          <div style="font-size:.72rem;letter-spacing:.22em;text-transform:uppercase;color:var(--accent)">Ideal para</div>
+          <ul style="list-style:none;display:grid;gap:12px;font-size:.93rem;color:var(--body);margin-top:-4px">
+            <li style="display:grid;grid-template-columns:14px 1fr;gap:12px"><span style="color:var(--gold-ink)">—</span><span>Levar aquela imagem específica que ficou fora da seleção</span></li>
+            <li style="display:grid;grid-template-columns:14px 1fr;gap:12px"><span style="color:var(--gold-ink)">—</span><span>Arquivo em alta resolução, com o nível de edição do seu plano</span></li>
+            <li style="display:grid;grid-template-columns:14px 1fr;gap:12px"><span style="color:var(--gold-ink)">—</span><span>Entrega junto ao bloco final do ensaio</span></li>
+          </ul>
+          <div style="margin-top:auto;padding-top:14px;font-size:.82rem;color:var(--muted)">Sem desconto por volume</div>
+        </article>
+
+        <article style="position:relative;display:flex;flex-direction:column;gap:18px;background:var(--card);border:1px solid var(--line);border-radius:20px;padding:clamp(22px,2.6vw,30px);box-shadow:inset 0 1px 0 var(--inset),0 34px 70px -46px rgba(0,0,0,.95)">
+          <div>
+            <div style="font-family:var(--display);font-size:clamp(1.2rem,2.6vw,1.45rem);font-weight:400">Coleção Essência</div>
+            <div style="font-size:.72rem;letter-spacing:.22em;text-transform:uppercase;color:var(--muted);margin-top:6px">10 a 19 fotos</div>
+          </div>
+          <div style="display:flex;align-items:baseline;gap:8px;flex-wrap:wrap">
+            <span style="font-weight:600;font-size:clamp(2.2rem,6vw,2.9rem);line-height:1;letter-spacing:-.02em">R$ 38</span>
+            <span style="color:var(--muted);font-size:.86rem">/ por imagem</span>
+          </div>
+          <div style="height:1px;background:linear-gradient(90deg,var(--accent),transparent)"></div>
+          <div style="font-size:.72rem;letter-spacing:.22em;text-transform:uppercase;color:var(--accent)">Ideal para</div>
+          <ul style="list-style:none;display:grid;gap:12px;font-size:.93rem;color:var(--body);margin-top:-4px">
+            <li style="display:grid;grid-template-columns:14px 1fr;gap:12px"><span style="color:var(--gold-ink)">—</span><span>Guardar as variações favoritas de cada look e expressão</span></li>
+            <li style="display:grid;grid-template-columns:14px 1fr;gap:12px"><span style="color:var(--gold-ink)">—</span><span>Mais material para compor quadros e um futuro álbum</span></li>
+            <li style="display:grid;grid-template-columns:14px 1fr;gap:12px"><span style="color:var(--gold-ink)">—</span><span>Arquivos preparados para impressão e para telas</span></li>
+          </ul>
+          <div style="margin-top:auto;padding-top:14px;font-size:.82rem;color:var(--muted)">Economia de R$ 2 por imagem</div>
+        </article>
+
+        <article style="position:relative;display:flex;flex-direction:column;gap:18px;background:linear-gradient(158deg,#f0dcae 2%,#c9a25a 38%,#8f6a26 100%);color:#120f0a;border:1px solid rgba(240,220,174,.75);border-radius:20px;padding:clamp(26px,2.8vw,32px);box-shadow:0 30px 70px -32px rgba(184,148,74,.6),inset 0 1px 0 rgba(255,255,255,.5)">
+          <div style="position:absolute;inset:0;overflow:hidden;border-radius:inherit;pointer-events:none">
+            <div style="position:absolute;top:0;left:0;width:38%;height:100%;background:linear-gradient(100deg,rgba(255,255,255,.15),transparent 70%);animation:sheen 11s ease-in-out 2s infinite"></div>
+          </div>
+          <div style="position:absolute;top:-12px;left:clamp(20px,2.4vw,28px);background:#080807;color:var(--accent);font-size:.6rem;letter-spacing:.24em;text-transform:uppercase;padding:6px 13px;border-radius:999px;border:1px solid rgba(227,198,141,.55);box-shadow:0 10px 24px -12px rgba(0,0,0,.9)">Mais escolhida</div>
+          <div style="position:relative">
+            <div style="font-family:var(--display);font-size:clamp(1.25rem,2.7vw,1.55rem);font-weight:500">Coleção Memórias</div>
+            <div style="font-size:.72rem;letter-spacing:.22em;text-transform:uppercase;color:rgba(18,15,10,.78);margin-top:6px">20 a 29 fotos</div>
+          </div>
+          <div style="position:relative;display:flex;align-items:baseline;gap:8px;flex-wrap:wrap">
+            <span style="font-weight:700;font-size:clamp(2.4rem,6.4vw,3.1rem);line-height:1;letter-spacing:-.02em">R$ 35</span>
+            <span style="color:rgba(18,15,10,.78);font-size:.86rem">/ por imagem</span>
+          </div>
+          <div style="height:1px;background:rgba(18,15,10,.28)"></div>
+          <div style="position:relative;font-size:.72rem;letter-spacing:.22em;text-transform:uppercase;color:rgba(18,15,10,.82);font-weight:500">Ideal para</div>
+          <ul style="position:relative;list-style:none;display:grid;gap:12px;font-size:.94rem;color:rgba(18,15,10,.9);margin-top:-4px">
+            <li style="display:grid;grid-template-columns:14px 1fr;gap:12px"><span>—</span><span>Uma seleção ampla, com mais ângulos, gestos e detalhes</span></li>
+            <li style="display:grid;grid-template-columns:14px 1fr;gap:12px"><span>—</span><span>Melhor relação entre quantidade e valor por imagem</span></li>
+            <li style="display:grid;grid-template-columns:14px 1fr;gap:12px"><span>—</span><span>Base sólida para álbum, quadros e presentes de família</span></li>
+            <li style="display:grid;grid-template-columns:14px 1fr;gap:12px"><span>—</span><span>Curadoria assistida na montagem da sua seleção</span></li>
+          </ul>
+          <div style="position:relative;margin-top:auto;padding-top:14px;font-size:.83rem;font-weight:500;color:rgba(18,15,10,.8)">Economia de R$ 5 por imagem</div>
+        </article>
+
+        <article style="position:relative;display:flex;flex-direction:column;gap:18px;background:var(--card-warm);border:1px solid rgba(184,148,74,.5);border-radius:20px;padding:clamp(22px,2.6vw,30px);box-shadow:inset 0 1px 0 var(--inset),0 34px 70px -44px rgba(184,148,74,.5)">
+          <div>
+            <div style="font-family:var(--display);font-size:clamp(1.2rem,2.6vw,1.45rem);font-weight:400">Coleção Legado</div>
+            <div style="font-size:.72rem;letter-spacing:.22em;text-transform:uppercase;color:var(--muted);margin-top:6px">30 fotos ou mais</div>
+          </div>
+          <div style="display:flex;align-items:baseline;gap:8px;flex-wrap:wrap">
+            <span style="font-weight:600;font-size:clamp(2.2rem,6vw,2.9rem);line-height:1;letter-spacing:-.02em;color:var(--accent-strong);text-shadow:0 8px 30px rgba(184,148,74,.5)">R$ 32</span>
+            <span style="color:var(--muted);font-size:.86rem">/ por imagem</span>
+          </div>
+          <div style="height:1px;background:linear-gradient(90deg,var(--accent),transparent)"></div>
+          <div style="font-size:.72rem;letter-spacing:.22em;text-transform:uppercase;color:var(--accent)">Ideal para</div>
+          <ul style="list-style:none;display:grid;gap:12px;font-size:.93rem;color:var(--body);margin-top:-4px">
+            <li style="display:grid;grid-template-columns:14px 1fr;gap:12px"><span style="color:var(--gold-ink)">—</span><span>Ensaios com troca de looks, locações ou família reunida</span></li>
+            <li style="display:grid;grid-template-columns:14px 1fr;gap:12px"><span style="color:var(--gold-ink)">—</span><span>Menor valor por imagem da tabela</span></li>
+            <li style="display:grid;grid-template-columns:14px 1fr;gap:12px"><span style="color:var(--gold-ink)">—</span><span>Vale comparar com a migração de plano antes de fechar</span></li>
+          </ul>
+          <div style="margin-top:auto;padding-top:14px;font-size:.82rem;color:var(--muted)">Economia de R$ 8 por imagem</div>
+        </article>
+
+      </div>
+    </section>
+
+    <div style="display:flex;align-items:center;gap:16px;justify-content:center">
+      <span style="height:1px;flex:1;max-width:280px;background:linear-gradient(90deg,transparent,var(--accent))"></span>
+      <span style="width:7px;height:7px;transform:rotate(45deg);background:linear-gradient(160deg,#f0dcae,#b8944a);box-shadow:0 0 18px rgba(184,148,74,.7)"></span>
+      <span style="height:1px;flex:1;max-width:280px;background:linear-gradient(270deg,transparent,var(--accent))"></span>
+    </div>
+
+    <section id="calculadora" style="position:relative;background:var(--card-warm);border:1px solid rgba(184,148,74,.45);border-radius:26px;padding:clamp(24px,3.4vw,48px);display:flex;flex-direction:column;gap:clamp(24px,3vw,36px);box-shadow:inset 0 1px 0 var(--inset),0 50px 100px -60px rgba(184,148,74,.6)">
+      <div style="display:flex;flex-direction:column;gap:12px;text-align:center;align-items:center">
+        <div style="font-size:.7rem;letter-spacing:.34em;text-transform:uppercase;color:var(--accent)">Simulador de extras</div>
+        <h2 style="font-family:var(--display);font-weight:300;font-size:clamp(1.6rem,4.6vw,2.6rem);line-height:1.06;max-width:24ch">Calcule o total e o novo prazo</h2>
+        <p style="color:var(--body);max-width:58ch;font-size:.98rem;text-wrap:pretty">Escolha a quantidade de fotografias extras e, se desejar, um nível de tratamento acima do incluso. O simulador aplica a faixa correspondente e mostra o acréscimo de prazo.</p>
+      </div>
+
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,330px),1fr));gap:clamp(22px,2.8vw,38px);align-items:start">
+
+        <div style="display:flex;flex-direction:column;gap:clamp(22px,2.4vw,30px)">
+          <div style="display:flex;flex-direction:column;gap:14px">
+            <div style="display:flex;justify-content:space-between;align-items:baseline;gap:12px">
+              <label style="font-size:.72rem;letter-spacing:.22em;text-transform:uppercase;color:var(--body)">Fotos extras</label>
+              <div style="display:flex;align-items:baseline;gap:6px">
+                <span style="font-weight:600;font-size:1.8rem;line-height:1;color:var(--accent-strong);text-shadow:0 6px 26px rgba(184,148,74,.5)">{{ qtd }}</span>
+                <span style="font-size:.82rem;color:var(--muted)">fotos</span>
+              </div>
+            </div>
+            <input type="range" min="1" max="60" step="1" value="{{ qtd }}" onChange="{{ setQtd }}" onInput="{{ setQtd }}" aria-label="Quantidade de fotos extras" style="width:100%;height:24px">
+            <div style="display:flex;justify-content:space-between;font-size:.75rem;color:var(--muted)"><span>1</span><span>60+</span></div>
+            <div style="display:flex;flex-wrap:wrap;gap:8px">
+              <button type="button" onClick="{{ setQ5 }}" style="background:var(--tint);border:1px solid var(--line-strong);color:var(--body);font-family:var(--body-font);font-size:.8rem;padding:9px 16px;border-radius:999px;cursor:pointer;transition:all .25s ease" style-hover="border-color:rgba(184,148,74,.85);color:var(--accent-strong)">5</button>
+              <button type="button" onClick="{{ setQ10 }}" style="background:var(--tint);border:1px solid var(--line-strong);color:var(--body);font-family:var(--body-font);font-size:.8rem;padding:9px 16px;border-radius:999px;cursor:pointer;transition:all .25s ease" style-hover="border-color:rgba(184,148,74,.85);color:var(--accent-strong)">10</button>
+              <button type="button" onClick="{{ setQ20 }}" style="background:var(--tint);border:1px solid var(--line-strong);color:var(--body);font-family:var(--body-font);font-size:.8rem;padding:9px 16px;border-radius:999px;cursor:pointer;transition:all .25s ease" style-hover="border-color:rgba(184,148,74,.85);color:var(--accent-strong)">20</button>
+              <button type="button" onClick="{{ setQ30 }}" style="background:var(--tint);border:1px solid var(--line-strong);color:var(--body);font-family:var(--body-font);font-size:.8rem;padding:9px 16px;border-radius:999px;cursor:pointer;transition:all .25s ease" style-hover="border-color:rgba(184,148,74,.85);color:var(--accent-strong)">30</button>
+            </div>
+          </div>
+
+          <div style="display:flex;flex-direction:column;gap:12px">
+            <label style="font-size:.72rem;letter-spacing:.22em;text-transform:uppercase;color:var(--body)">Tratamento adicional (opcional)</label>
+            <p style="font-size:.86rem;color:var(--muted);margin-top:-6px;text-wrap:pretty">Sua foto extra já vem com o nível de edição incluso no seu plano. Os valores abaixo valem apenas para quem deseja um acabamento superior ao contratado.</p>
+            <div style="display:grid;gap:10px">
+              <button type="button" onClick="{{ setEd0 }}" style="{{ edStyle0 }}">
+                <span style="display:flex;flex-direction:column;align-items:flex-start;gap:2px"><span style="font-size:.97rem">Somente o incluso no plano</span><span style="font-size:.79rem;opacity:.78">Sem acréscimo</span></span>
+                <span style="font-weight:600;white-space:nowrap">R$ 0</span>
+              </button>
+              <button type="button" onClick="{{ setEd8 }}" style="{{ edStyle8 }}">
+                <span style="display:flex;flex-direction:column;align-items:flex-start;gap:2px"><span style="font-size:.97rem">Tradicional</span><span style="font-size:.79rem;opacity:.78">Ajustes naturais: cor, luz, contraste, pele, fundo</span></span>
+                <span style="font-weight:600;white-space:nowrap">+ R$ 8</span>
+              </button>
+              <button type="button" onClick="{{ setEd10 }}" style="{{ edStyle10 }}">
+                <span style="display:flex;flex-direction:column;align-items:flex-start;gap:2px"><span style="font-size:.97rem">VIP</span><span style="font-size:.79rem;opacity:.78">Mudanças corporais ou estruturais da imagem</span></span>
+                <span style="font-weight:600;white-space:nowrap">+ R$ 10</span>
+              </button>
+              <button type="button" onClick="{{ setEd20 }}" style="{{ edStyle20 }}">
+                <span style="display:flex;flex-direction:column;align-items:flex-start;gap:2px"><span style="font-size:.97rem">Fine Art</span><span style="font-size:.79rem;opacity:.78">Montagem artística: fundos, texturas, cores especiais</span></span>
+                <span style="font-weight:600;white-space:nowrap">+ R$ 20</span>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <div style="position:relative;overflow:hidden;background:linear-gradient(158deg,#f4e3ba 0%,#c9a25a 42%,#8f6a26 100%);color:#120f0a;border:1px solid rgba(240,220,174,.7);border-radius:22px;padding:clamp(22px,2.8vw,34px);display:flex;flex-direction:column;gap:16px;box-shadow:0 40px 80px -44px rgba(184,148,74,.7),inset 0 1px 0 rgba(255,255,255,.55)">
+          <div style="position:absolute;top:0;left:0;width:35%;height:100%;background:linear-gradient(100deg,rgba(255,255,255,.13),transparent 70%);animation:sheen 12s ease-in-out 3s infinite;pointer-events:none"></div>
+          <div style="position:relative;font-size:.68rem;letter-spacing:.28em;text-transform:uppercase;color:rgba(18,15,10,.78)">Sua simulação</div>
+          <div style="position:relative;display:flex;align-items:baseline;gap:10px;flex-wrap:wrap">
+            <span style="font-weight:700;font-size:clamp(2.3rem,7vw,3.2rem);line-height:1;letter-spacing:-.02em">{{ totalFmt }}</span>
+            <span style="font-size:.88rem;color:rgba(18,15,10,.78)">total das extras</span>
+          </div>
+          <div style="height:1px;background:rgba(18,15,10,.28)"></div>
+          <div style="position:relative;display:grid;gap:11px;font-size:.93rem">
+            <div style="display:flex;justify-content:space-between;gap:14px"><span style="color:rgba(18,15,10,.78)">Faixa aplicada</span><b style="font-weight:600;text-align:right">{{ faixa }}</b></div>
+            <div style="display:flex;justify-content:space-between;gap:14px"><span style="color:rgba(18,15,10,.78)">Valor por imagem</span><b style="font-weight:600">{{ unitFmt }}</b></div>
+            <div style="display:flex;justify-content:space-between;gap:14px"><span style="color:rgba(18,15,10,.78)">Tratamento adicional</span><b style="font-weight:600;text-align:right">{{ edLabel }}</b></div>
+            <div style="display:flex;justify-content:space-between;gap:14px"><span style="color:rgba(18,15,10,.78)">Preço final por imagem</span><b style="font-weight:600">{{ finalUnitFmt }}</b></div>
+          </div>
+          <div style="height:1px;background:rgba(18,15,10,.28)"></div>
+          <div style="position:relative;display:grid;gap:11px;font-size:.93rem">
+            <div style="display:flex;justify-content:space-between;gap:14px"><span style="color:rgba(18,15,10,.78)">Acréscimo de prazo</span><b style="font-weight:600;text-align:right">{{ prazo }}</b></div>
+            <div style="display:flex;justify-content:space-between;gap:14px"><span style="color:rgba(18,15,10,.78)">Quitação</span><b style="font-weight:600;text-align:right">até 3 dias após a seleção</b></div>
+          </div>
+          <p style="position:relative;font-size:.82rem;color:rgba(18,15,10,.78);text-wrap:pretty">O prazo do contrato passa a contar com este acréscimo em dias úteis, iniciado após a quitação integral das extras.</p>
+          <a href="{{ waLink }}" target="_blank" rel="noopener" style="position:relative;margin-top:4px;background:#14110a;color:#f9ecc8;font-weight:500;letter-spacing:.16em;text-transform:uppercase;font-size:.78rem;padding:18px 24px;border-radius:999px;text-align:center;box-shadow:0 22px 44px -20px rgba(0,0,0,.95),inset 0 1px 0 rgba(255,255,255,.14);transition:transform .3s ease,background .3s ease" style-hover="transform:translateY(-3px);background:#171511">Enviar simulação no WhatsApp</a>
+          <p style="position:relative;font-size:.76rem;color:rgba(18,15,10,.7);text-align:center">Simulação informativa. O valor final é confirmado pelo fotógrafo conforme o seu plano.</p>
+        </div>
+      </div>
+    </section>
+
+    <section style="display:flex;flex-direction:column;gap:clamp(20px,2.6vw,28px)">
+      <div style="text-align:center;display:flex;flex-direction:column;gap:12px;align-items:center">
+        <div style="font-size:.7rem;letter-spacing:.34em;text-transform:uppercase;color:var(--accent)">Níveis de edição</div>
+        <h2 style="font-family:var(--display);font-weight:300;font-size:clamp(1.6rem,4.6vw,2.6rem);line-height:1.06;max-width:28ch">Fotografias tratadas, editadas ou montadas</h2>
+        <p style="color:var(--body);max-width:62ch;font-size:.98rem;text-wrap:pretty">Todo plano já inclui um nível de edição, e toda imagem entregue passa por acabamento profissional. Os valores abaixo se aplicam somente quando você deseja um nível superior ao contratado — consulte o seu plano ou fale com o fotógrafo.</p>
+      </div>
+
+      <div class="grid3" style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:clamp(14px,1.8vw,20px)">
+        <article style="background:var(--card);border:1px solid var(--line);border-radius:20px;padding:clamp(22px,2.6vw,30px);display:flex;flex-direction:column;gap:14px;box-shadow:inset 0 1px 0 var(--inset),0 34px 70px -48px rgba(0,0,0,.95)">
+          <div style="display:flex;justify-content:space-between;align-items:baseline;gap:12px">
+            <span style="font-family:var(--display);font-size:1.32rem">Tradicional</span>
+            <span style="font-weight:600;font-size:1.28rem">R$ 8</span>
+          </div>
+          <div style="font-size:.7rem;letter-spacing:.2em;text-transform:uppercase;color:var(--muted)">por foto</div>
+          <p style="color:var(--body);font-size:.93rem;text-wrap:pretty">Ajustes naturais da imagem: cor, luz, contraste, pele, fundo e enquadramento. Preserva a aparência real, com acabamento refinado.</p>
+        </article>
+        <article style="background:var(--card-warm);border:1px solid rgba(184,148,74,.5);border-radius:20px;padding:clamp(22px,2.6vw,30px);display:flex;flex-direction:column;gap:14px;box-shadow:inset 0 1px 0 var(--inset),0 34px 70px -46px rgba(184,148,74,.45)">
+          <div style="display:flex;justify-content:space-between;align-items:baseline;gap:12px">
+            <span style="font-family:var(--display);font-size:1.32rem">VIP</span>
+            <span style="font-weight:600;font-size:1.28rem;color:var(--accent-strong)">R$ 10</span>
+          </div>
+          <div style="font-size:.7rem;letter-spacing:.2em;text-transform:uppercase;color:var(--muted)">por foto</div>
+          <p style="color:var(--body);font-size:.93rem;text-wrap:pretty">Inclui tudo do tradicional e avança para mudanças corporais ou estruturais: silhueta, proporções, remoção de elementos e correções mais profundas.</p>
+        </article>
+        <article style="position:relative;overflow:hidden;background:var(--card-warm);border:1px solid rgba(240,220,174,.55);border-radius:20px;padding:clamp(22px,2.6vw,30px);display:flex;flex-direction:column;gap:14px;box-shadow:inset 0 1px 0 var(--inset),0 34px 70px -42px rgba(184,148,74,.55)">
+          <div style="display:flex;justify-content:space-between;align-items:baseline;gap:12px">
+            <span style="font-family:var(--display);font-size:1.32rem">Fine Art</span>
+            <span style="font-weight:600;font-size:1.28rem;color:var(--accent-strong);text-shadow:0 6px 24px rgba(184,148,74,.55)">R$ 20</span>
+          </div>
+          <div style="font-size:.7rem;letter-spacing:.2em;text-transform:uppercase;color:var(--muted)">por foto</div>
+          <p style="color:var(--body);font-size:.93rem;text-wrap:pretty">Mudanças grandes e elaboradas, com direção artística: troca de fundos, texturas, cores especiais e composições. A fotografia torna-se uma obra autoral.</p>
+        </article>
+      </div>
+      <p style="text-align:center;font-family:var(--display);font-style:italic;color:var(--accent);font-size:.96rem">Não sabe qual nível acompanha o seu pacote? Consulte o seu plano ou pergunte ao fotógrafo antes de escolher.</p>
+    </section>
+
+    <section style="position:relative;background:var(--card);border:1px solid rgba(184,148,74,.4);border-radius:24px;padding:clamp(24px,3.2vw,44px);display:flex;flex-direction:column;gap:clamp(20px,2.6vw,28px);box-shadow:inset 0 1px 0 var(--inset),0 44px 90px -60px rgba(184,148,74,.5)">
+      <div style="display:flex;flex-direction:column;gap:12px;align-items:center;text-align:center">
+        <div style="font-size:.7rem;letter-spacing:.34em;text-transform:uppercase;color:var(--accent)">O valor de uma fotografia</div>
+        <h2 style="font-family:var(--display);font-weight:300;font-size:clamp(1.7rem,4.6vw,2.7rem);line-height:1.06;max-width:26ch">Por que não comercializamos arquivos brutos</h2>
+      </div>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,290px),1fr));gap:clamp(20px,2.6vw,34px)">
+        <div style="display:flex;flex-direction:column;gap:8px">
+          <h3 style="font-weight:500;font-size:1.14rem;letter-spacing:.005em;color:var(--text)">Cada imagem é um produto</h3>
+          <p style="color:var(--body);font-size:.93rem;text-wrap:pretty">O nosso ofício é produzir e comercializar fotografias — não arquivos de câmera. Cada imagem entregue é uma peça finalizada, individual e irrepetível, e é isso que está sendo adquirido.</p>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:8px">
+          <h3 style="font-weight:500;font-size:1.14rem;letter-spacing:.005em;color:var(--text)">O que está incluso no valor</h3>
+          <p style="color:var(--body);font-size:.93rem;text-wrap:pretty">Direção e tempo de produção, equipamento, estúdio, horas de pós-produção, curadoria, licenças de software, armazenamento em nuvem e todos os custos operacionais envolvidos na entrega final.</p>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:8px">
+          <h3 style="font-weight:500;font-size:1.14rem;letter-spacing:.005em;color:var(--text)">Padrão e assinatura do estúdio</h3>
+          <p style="color:var(--body);font-size:.93rem;text-wrap:pretty">Toda imagem entregue carrega a identidade visual e o nome do estúdio. Arquivos sem finalização não representam o nosso trabalho e, por isso, não são disponibilizados em nenhuma hipótese.</p>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:8px">
+          <h3 style="font-weight:500;font-size:1.14rem;letter-spacing:.005em;color:var(--text)">Direito de imagem e uso</h3>
+          <p style="color:var(--body);font-size:.93rem;text-wrap:pretty">O uso das imagens, por cliente e por estúdio, segue exatamente as permissões e o direito de imagem descritos em contrato. Recomendamos a leitura dessas cláusulas antes da divulgação.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="grid3" style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:clamp(14px,1.8vw,20px)">
+      <article style="background:var(--card);border:1px solid var(--line);border-radius:22px;padding:clamp(22px,2.8vw,32px);display:flex;flex-direction:column;gap:14px;box-shadow:inset 0 1px 0 var(--inset),0 34px 70px -48px rgba(0,0,0,.95)">
+        <div style="font-size:.7rem;letter-spacing:.28em;text-transform:uppercase;color:var(--accent)">Prazo de entrega</div>
+        <h3 style="font-family:var(--display);font-weight:400;font-size:1.32rem;line-height:1.2">Extras acrescentam prazo</h3>
+        <ul style="list-style:none;display:grid;gap:12px;font-size:.93rem;color:var(--body)">
+          <li style="display:flex;justify-content:space-between;gap:14px;border-bottom:1px solid var(--line);padding-bottom:10px"><span>Até 10 fotos extras</span><b style="color:var(--text);font-weight:600;font-size:1.12rem;white-space:nowrap">+7 dias úteis</b></li>
+          <li style="display:flex;justify-content:space-between;gap:14px;border-bottom:1px solid var(--line);padding-bottom:10px"><span>De 11 a 19 fotos extras</span><b style="color:var(--text);font-weight:600;font-size:1.12rem;white-space:nowrap">+10 dias úteis</b></li>
+          <li style="display:flex;justify-content:space-between;gap:14px"><span>20 fotos extras ou mais</span><b style="color:var(--accent-strong);font-weight:600;font-size:1.18rem;white-space:nowrap">+14 dias úteis</b></li>
+        </ul>
+        <p style="color:var(--muted);font-size:.87rem;text-wrap:pretty">O acréscimo soma-se ao prazo original do contrato e começa a contar após a quitação integral das extras.</p>
+      </article>
+
+      <article style="background:var(--card);border:1px solid var(--line);border-radius:22px;padding:clamp(22px,2.8vw,32px);display:flex;flex-direction:column;gap:14px;box-shadow:inset 0 1px 0 var(--inset),0 34px 70px -48px rgba(0,0,0,.95)">
+        <div style="font-size:.7rem;letter-spacing:.28em;text-transform:uppercase;color:var(--accent)">Pagamento</div>
+        <h3 style="font-family:var(--display);font-weight:400;font-size:1.32rem;line-height:1.2">Quitação em até 3 dias</h3>
+        <p style="color:var(--body);font-size:.93rem;text-wrap:pretty">As fotografias extras devem ser quitadas em <b style="color:var(--text);font-weight:500">100% em até 3 dias após a seleção</b>. A liberação da continuidade do trabalho depende dessa confirmação, pois as extras passam a integrar o bloco único de tratamento.</p>
+        <p style="color:var(--muted);font-size:.87rem;text-wrap:pretty">Sem a quitação no prazo, a edição não entra na fila e o prazo de entrega é recalculado a partir da data da confirmação do pagamento.</p>
+      </article>
+
+      <article style="background:var(--card);border:1px solid var(--line);border-radius:22px;padding:clamp(22px,2.8vw,32px);display:flex;flex-direction:column;gap:14px;box-shadow:inset 0 1px 0 var(--inset),0 34px 70px -48px rgba(0,0,0,.95)">
+        <div style="font-size:.7rem;letter-spacing:.28em;text-transform:uppercase;color:var(--accent)">Processo</div>
+        <h3 style="font-family:var(--display);font-weight:400;font-size:1.32rem;line-height:1.2">Tratamento em bloco único</h3>
+        <p style="color:var(--body);font-size:.93rem;text-wrap:pretty">Todas as imagens do ensaio — inclusas e extras — seguem um processo único, executado de uma só vez, para manter a mesma identidade de cor, luz e acabamento entre elas.</p>
+        <p style="color:var(--muted);font-size:.87rem;text-wrap:pretty">Por isso não editamos imagens isoladas depois: reabrir o bloco gera retrabalho, quebra o padrão da série e impacta o prazo de toda a fila de produção.</p>
+      </article>
+    </section>
+
+    <section style="position:relative;background:var(--card-warm);border:1px solid rgba(184,148,74,.42);border-radius:24px;padding:clamp(24px,3.2vw,44px);display:flex;flex-direction:column;gap:clamp(20px,2.6vw,30px);box-shadow:inset 0 1px 0 var(--inset),0 44px 90px -58px rgba(184,148,74,.5)">
+      <div style="display:flex;flex-direction:column;gap:12px;align-items:center;text-align:center">
+        <div style="font-size:.7rem;letter-spacing:.34em;text-transform:uppercase;color:var(--accent)">Retirada e galeria digital</div>
+        <h2 style="font-family:var(--display);font-weight:300;font-size:clamp(1.7rem,4.6vw,2.7rem);line-height:1.06;max-width:26ch">Entrega no estúdio e liberação do download</h2>
+        <p style="color:var(--body);max-width:62ch;font-size:.98rem;text-wrap:pretty">Para que tudo seja concluído com segurança, a entrega segue uma ordem simples: conferência presencial dos produtos e, em seguida, liberação da galeria digital.</p>
+      </div>
+      <div class="grid4" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,270px),1fr));gap:clamp(18px,2.4vw,28px)">
+        <div style="display:flex;flex-direction:column;gap:10px;padding:clamp(18px,2.2vw,24px);background:var(--tint);border:1px solid var(--line);border-radius:18px">
+          <div style="display:flex;align-items:center;gap:12px"><span style="font-weight:600;font-size:1.9rem;line-height:1;letter-spacing:-.02em;background:linear-gradient(150deg,#f4e3ba,#b8944a);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent">01</span><span style="flex:1;height:1px;background:linear-gradient(90deg,rgba(184,148,74,.55),transparent)"></span></div>
+          <h3 style="font-weight:500;font-size:1.14rem;letter-spacing:.005em;color:var(--text)">Retirada dos produtos no estúdio</h3>
+          <p style="color:var(--body);font-size:.92rem;text-wrap:pretty">Fotografias impressas, álbuns, quadros e demais produtos são retirados presencialmente no estúdio, na data combinada. Fique atento ao prazo de retirada informado na entrega.</p>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:10px;padding:clamp(18px,2.2vw,24px);background:var(--tint);border:1px solid var(--line);border-radius:18px">
+          <div style="display:flex;align-items:center;gap:12px"><span style="font-weight:600;font-size:1.9rem;line-height:1;letter-spacing:-.02em;background:linear-gradient(150deg,#f4e3ba,#b8944a);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent">02</span><span style="flex:1;height:1px;background:linear-gradient(90deg,rgba(184,148,74,.55),transparent)"></span></div>
+          <h3 style="font-weight:500;font-size:1.14rem;letter-spacing:.005em;color:var(--text)">Conferência e comprovante</h3>
+          <p style="color:var(--body);font-size:.92rem;text-wrap:pretty">A galeria digital é liberada após a conferência dos produtos no estúdio e a assinatura do comprovante de entrega — garantia de que tudo foi recebido conforme o contratado.</p>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:10px;padding:clamp(18px,2.2vw,24px);background:var(--tint);border:1px solid rgba(184,148,74,.42);border-radius:18px">
+          <div style="display:flex;align-items:center;gap:12px"><span style="font-weight:600;font-size:1.9rem;line-height:1;letter-spacing:-.02em;background:linear-gradient(150deg,#f4e3ba,#b8944a);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent">03</span><span style="flex:1;height:1px;background:linear-gradient(90deg,rgba(184,148,74,.55),transparent)"></span></div>
+          <h3 style="font-weight:500;font-size:1.14rem;letter-spacing:.005em;color:var(--text)">Download em até 90 dias</h3>
+          <p style="color:var(--body);font-size:.92rem;text-wrap:pretty">A galeria permanece disponível por 90 dias a partir da liberação. Após esse período o acesso é encerrado, e novos envios são orçados à parte pelo custo de armazenamento em nuvem.</p>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:10px;padding:clamp(18px,2.2vw,24px);background:var(--tint);border:1px solid var(--line);border-radius:18px">
+          <div style="display:flex;align-items:center;gap:12px"><span style="font-weight:600;font-size:1.9rem;line-height:1;letter-spacing:-.02em;background:linear-gradient(150deg,#f4e3ba,#b8944a);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent">04</span><span style="flex:1;height:1px;background:linear-gradient(90deg,rgba(184,148,74,.55),transparent)"></span></div>
+          <h3 style="font-weight:500;font-size:1.14rem;letter-spacing:.005em;color:var(--text)">Guarde em dois locais seguros</h3>
+          <p style="color:var(--body);font-size:.92rem;text-wrap:pretty">Recomendamos salvar os arquivos em pelo menos dois destinos distintos — computador e nuvem ou disco externo. Assim as suas imagens ficam protegidas por muitos anos.</p>
+        </div>
+      </div>
+      <p style="color:var(--muted);font-size:.88rem;text-align:center;max-width:74ch;margin:0 auto;text-wrap:pretty">A hospedagem em nuvem é um serviço contínuo e pago pelo estúdio; por isso o período de disponibilidade é limitado e reenvios após o prazo têm custo. Baixe as suas imagens assim que a galeria for liberada.</p>
+    </section>
+
+    <section class="grid3" style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:clamp(14px,1.8vw,22px);align-items:stretch">
+      <div style="position:relative;border-radius:22px;overflow:hidden;min-height:300px;border:1px solid var(--line)">
+        <image-slot id="galeria-1" shape="rect" fit="cover" placeholder="Arraste uma fotografia do ensaio"></image-slot>
+      </div>
+      <div style="background:var(--card-warm);border:1px solid rgba(184,148,74,.42);border-radius:22px;padding:clamp(24px,3vw,38px);display:flex;flex-direction:column;justify-content:center;gap:16px;box-shadow:inset 0 1px 0 var(--inset)">
+        <span style="width:7px;height:7px;transform:rotate(45deg);background:linear-gradient(160deg,#f0dcae,#b8944a);box-shadow:0 0 18px rgba(184,148,74,.6)"></span>
+        <p style="font-family:var(--display);font-size:clamp(1.15rem,2.6vw,1.6rem);line-height:1.3;color:var(--text);text-wrap:pretty">Uma imagem extra raramente é apenas uma imagem: é o gesto que faltava, o detalhe do vestido, o olhar que só aconteceu uma vez.</p>
+        <p style="color:var(--body);font-size:.95rem;text-wrap:pretty">É por isso que a seleção merece calma. As extras compõem a narrativa completa do ensaio e formam a base do álbum que a sua família vai folhear por décadas.</p>
+      </div>
+      <div style="position:relative;border-radius:22px;overflow:hidden;min-height:300px;border:1px solid var(--line)">
+        <image-slot id="galeria-2" shape="rect" fit="cover" placeholder="Arraste outra fotografia do ensaio"></image-slot>
+      </div>
+    </section>
+
+    <section style="background:var(--card);border:1px solid var(--line);border-radius:24px;padding:clamp(24px,3.2vw,44px);display:flex;flex-direction:column;gap:clamp(20px,2.6vw,30px);box-shadow:inset 0 1px 0 var(--inset),0 44px 90px -62px rgba(0,0,0,.35)">
+      <div style="display:flex;flex-direction:column;gap:12px">
+        <div style="font-size:.7rem;letter-spacing:.34em;text-transform:uppercase;color:var(--accent)">Como funciona · o padrão da casa</div>
+        <h2 style="font-family:var(--display);font-weight:300;font-size:clamp(1.7rem,4.6vw,2.7rem);line-height:1.06;max-width:24ch">Da seleção à entrega, em seis passos</h2>
+      </div>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,280px),1fr));gap:clamp(20px,2.6vw,34px)">
+        <div style="display:flex;flex-direction:column;gap:10px;padding:clamp(16px,2vw,22px);border-radius:16px;background:var(--tint);border:1px solid var(--line)">
+          <div style="display:flex;align-items:center;gap:12px"><span style="font-weight:600;font-size:1.9rem;line-height:1;letter-spacing:-.02em;background:linear-gradient(150deg,#f4e3ba,#b8944a);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent">01</span><span style="flex:1;height:1px;background:linear-gradient(90deg,rgba(184,148,74,.55),transparent)"></span></div>
+          <h3 style="font-weight:500;font-size:1.14rem;letter-spacing:.005em;color:var(--text)">Provas de seleção</h3>
+          <p style="color:var(--body);font-size:.93rem;text-wrap:pretty">Você recebe as provas com ajuste leve de cor, sem edição pesada, apenas para avaliar e escolher com clareza.</p>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:10px;padding:clamp(16px,2vw,22px);border-radius:16px;background:var(--tint);border:1px solid var(--line)">
+          <div style="display:flex;align-items:center;gap:12px"><span style="font-weight:600;font-size:1.9rem;line-height:1;letter-spacing:-.02em;background:linear-gradient(150deg,#f4e3ba,#b8944a);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent">02</span><span style="flex:1;height:1px;background:linear-gradient(90deg,rgba(184,148,74,.55),transparent)"></span></div>
+          <h3 style="font-weight:500;font-size:1.14rem;letter-spacing:.005em;color:var(--text)">Curadoria de tratamento</h3>
+          <p style="color:var(--body);font-size:.93rem;text-wrap:pretty">Nesse momento alinhamos o acabamento: pele mais lisa ou mais próxima do natural, com textura definida nas provas de seleção.</p>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:10px;padding:clamp(16px,2vw,22px);border-radius:16px;background:var(--tint);border:1px solid var(--line)">
+          <div style="display:flex;align-items:center;gap:12px"><span style="font-weight:600;font-size:1.9rem;line-height:1;letter-spacing:-.02em;background:linear-gradient(150deg,#f4e3ba,#b8944a);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent">03</span><span style="flex:1;height:1px;background:linear-gradient(90deg,rgba(184,148,74,.55),transparent)"></span></div>
+          <h3 style="font-weight:500;font-size:1.14rem;letter-spacing:.005em;color:var(--text)">Escolha das extras</h3>
+          <p style="color:var(--body);font-size:.93rem;text-wrap:pretty">As extras somam às imagens já inclusas no plano. Nada é substituído, e a faixa de preço se aplica ao total escolhido.</p>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:10px;padding:clamp(16px,2vw,22px);border-radius:16px;background:var(--tint);border:1px solid var(--line)">
+          <div style="display:flex;align-items:center;gap:12px"><span style="font-weight:600;font-size:1.9rem;line-height:1;letter-spacing:-.02em;background:linear-gradient(150deg,#f4e3ba,#b8944a);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent">04</span><span style="flex:1;height:1px;background:linear-gradient(90deg,rgba(184,148,74,.55),transparent)"></span></div>
+          <h3 style="font-weight:500;font-size:1.14rem;letter-spacing:.005em;color:var(--text)">Quitação e liberação</h3>
+          <p style="color:var(--body);font-size:.93rem;text-wrap:pretty">Com o pagamento integral confirmado em até 3 dias, o ensaio entra na fila de edição com o novo prazo já definido.</p>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:10px;padding:clamp(16px,2vw,22px);border-radius:16px;background:var(--tint);border:1px solid var(--line)">
+          <div style="display:flex;align-items:center;gap:12px"><span style="font-weight:600;font-size:1.9rem;line-height:1;letter-spacing:-.02em;background:linear-gradient(150deg,#f4e3ba,#b8944a);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent">05</span><span style="flex:1;height:1px;background:linear-gradient(90deg,rgba(184,148,74,.55),transparent)"></span></div>
+          <h3 style="font-weight:500;font-size:1.14rem;letter-spacing:.005em;color:var(--text)">Edição em bloco</h3>
+          <p style="color:var(--body);font-size:.93rem;text-wrap:pretty">Tratamento, edição ou montagem conforme o nível contratado — todas as imagens no mesmo padrão, de uma única vez.</p>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:10px;padding:clamp(16px,2vw,22px);border-radius:16px;background:var(--tint);border:1px solid var(--line)">
+          <div style="display:flex;align-items:center;gap:12px"><span style="font-weight:600;font-size:1.9rem;line-height:1;letter-spacing:-.02em;background:linear-gradient(150deg,#f4e3ba,#b8944a);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent">06</span><span style="flex:1;height:1px;background:linear-gradient(90deg,rgba(184,148,74,.55),transparent)"></span></div>
+          <h3 style="font-weight:500;font-size:1.14rem;letter-spacing:.005em;color:var(--text)">Entrega e galeria</h3>
+          <p style="color:var(--body);font-size:.93rem;text-wrap:pretty">Produtos conferidos no estúdio e galeria liberada em alta resolução, dentro do prazo do contrato acrescido das extras.</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="duvidas" style="display:flex;flex-direction:column;gap:clamp(20px,2.6vw,28px)">
+      <div style="text-align:center;display:flex;flex-direction:column;gap:12px;align-items:center">
+        <div style="font-size:.7rem;letter-spacing:.34em;text-transform:uppercase;color:var(--accent)">Perguntas frequentes</div>
+        <h2 style="font-family:var(--display);font-weight:300;font-size:clamp(1.6rem,4.6vw,2.6rem);line-height:1.06;max-width:24ch">Tudo esclarecido antes de contratar</h2>
+        <p style="color:var(--body);max-width:58ch;font-size:.98rem;text-wrap:pretty">Estes pontos fazem parte do processo do estúdio e valem para todos os ensaios.</p>
+      </div>
+
+      <div style="display:grid;gap:10px">
+        <sc-for list="{{ faqs }}" as="f" hint-placeholder-count="10">
+          <div style="background:var(--card);border:1px solid var(--line);border-radius:18px;overflow:hidden;box-shadow:inset 0 1px 0 var(--inset)">
+            <button type="button" onClick="{{ f.toggle }}" style="width:100%;background:transparent;border:none;color:var(--text);font-family:var(--body-font);font-weight:400;font-size:clamp(.97rem,2.2vw,1.06rem);text-align:left;padding:clamp(16px,2vw,22px) clamp(18px,2.4vw,26px);display:flex;justify-content:space-between;align-items:center;gap:16px;cursor:pointer;line-height:1.35">
+              <span>{{ f.q }}</span>
+              <span style="display:flex;align-items:center;justify-content:center;width:30px;height:30px;border-radius:50%;border:1px solid rgba(184,148,74,.5);background:linear-gradient(150deg,rgba(240,220,174,.18),transparent);color:var(--accent-strong);font-size:1.1rem;line-height:1;flex-shrink:0">{{ f.sign }}</span>
+            </button>
+            <sc-if value="{{ f.open }}" hint-placeholder-val="{{ false }}">
+              <div style="padding:0 clamp(18px,2.4vw,26px) clamp(18px,2.2vw,24px);color:var(--body);font-size:.95rem;max-width:80ch;text-wrap:pretty">{{ f.a }}</div>
+            </sc-if>
+          </div>
+        </sc-for>
+      </div>
+    </section>
+
+    <section style="position:relative;overflow:hidden;background:linear-gradient(120deg,#f4e3ba 0%,#c9a25a 40%,#8f6a26 100%);color:#120f0a;border-radius:24px;padding:clamp(26px,3.6vw,52px);display:flex;flex-direction:column;align-items:center;gap:clamp(16px,2vw,24px);text-align:center;box-shadow:0 44px 90px -46px rgba(184,148,74,.7),inset 0 1px 0 rgba(255,255,255,.5)">
+      <div style="position:absolute;top:0;left:0;width:30%;height:100%;background:linear-gradient(100deg,rgba(255,255,255,.12),transparent 70%);animation:sheen 13s ease-in-out 4s infinite;pointer-events:none"></div>
+      <h2 style="position:relative;font-family:var(--display);font-weight:400;font-size:clamp(1.8rem,5.2vw,3.1rem);line-height:1.04;max-width:24ch;text-wrap:pretty">Cada imagem escolhida<br>fica com você para sempre.</h2>
+      <p style="position:relative;max-width:56ch;font-size:clamp(.92rem,2vw,1.02rem);color:rgba(18,15,10,.82);text-wrap:pretty">Alinhe a sua seleção diretamente com o fotógrafo: confirmamos a faixa aplicada, o nível de edição desejado e a nova data de entrega antes de você fechar as extras.</p>
+      <a href="https://wa.me/5517991278704?text=Ol%C3%A1%21%20Gostaria%20de%20saber%20mais%20sobre%20as%20fotos%20digitais%20extras." target="_blank" rel="noopener" style="position:relative;background:#14110a;color:#f9ecc8;font-weight:500;letter-spacing:.18em;text-transform:uppercase;font-size:clamp(.74rem,1.7vw,.82rem);padding:19px clamp(30px,4.6vw,50px);border-radius:999px;box-shadow:0 26px 54px -22px rgba(0,0,0,.95),inset 0 1px 0 rgba(255,255,255,.14);transition:transform .3s ease,background .3s ease" style-hover="transform:translateY(-3px);background:#171511">Falar com o fotógrafo</a>
+    </section>
+
+    <footer style="text-align:center;border-top:1px solid var(--line);padding-top:clamp(22px,3vw,34px);color:var(--muted);font-size:.83rem;letter-spacing:.05em;display:flex;flex-direction:column;gap:10px">
+      <div style="font-family:var(--display);font-style:italic;color:var(--text);font-size:1.25rem;letter-spacing:.02em">Lumiar Retratos &amp; Estúdio</div>
+      <div>Guaíra · SP &nbsp;—&nbsp; <a href="https://www.fabriciogino.com.br" target="_blank" rel="noopener">fabriciogino.com.br</a> &nbsp;—&nbsp; @lumiar_retratos_studio</div>
+      <div style="color:var(--muted)">Valores e prazos válidos para 2026, sujeitos a alteração sem aviso prévio. As simulações desta página são informativas e não substituem o orçamento formal. Uso das imagens conforme o direito de imagem e as permissões descritas em contrato.</div>
+    </footer>
+
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:1180}}">
+const FAQ = [
+  {q:"As fotografias extras aumentam o prazo de entrega?",
+   a:"Sim. Como as extras passam a integrar o bloco de tratamento do ensaio, o prazo do contrato recebe um acréscimo em dias úteis: até 10 fotos extras, +7 dias úteis; de 11 a 19 fotos, +10 dias úteis; a partir de 20 fotos, +14 dias úteis. O acréscimo começa a contar após a quitação integral das extras."},
+  {q:"Quando preciso pagar pelas extras?",
+   a:"O valor deve estar quitado em 100% em até 3 dias após a conclusão da seleção. A continuidade do trabalho é liberada somente com o pagamento confirmado, e é a partir dessa data que o novo prazo de entrega passa a ser contado."},
+  {q:"Por que não é possível editar apenas algumas imagens depois?",
+   a:"Porque todas as imagens seguem um processo único, executado em bloco, que garante a mesma identidade de cor, luz e acabamento em toda a série. Editar fotos isoladas posteriormente significa reabrir um processo concluído, gerar retrabalho e comprometer o padrão e o prazo de produção."},
+  {q:"Qual a diferença entre fotografia tratada, editada e montada?",
+   a:"Tratada é a edição tradicional: ajustes naturais de cor, luz, contraste, pele, fundo e enquadramento (R$ 8 por foto acima do incluso). Editada é a VIP: mudanças corporais ou estruturais da imagem (R$ 10 por foto). Montada é a Fine Art: intervenções grandes e elaboradas, com direção artística — fundos, texturas, cores especiais e composições (R$ 20 por foto)."},
+  {q:"Todas as imagens já vêm com edição?",
+   a:"Sim. Toda imagem entregue passa por acabamento profissional, no nível de edição incluso no seu plano. Os valores da tabela de níveis valem apenas quando você deseja um acabamento superior ao contratado — para saber o que está incluso, consulte o seu plano ou fale com o fotógrafo."},
+  {q:"Por que o estúdio não entrega arquivos brutos?",
+   a:"Porque o nosso ofício é produzir e comercializar fotografias, e não arquivos de câmera. Cada imagem entregue é um produto único e finalizado; o valor corresponde ao tempo de produção, à pós-produção, aos custos operacionais de estúdio, equipamento e armazenamento, e ao padrão artístico que leva o nome do estúdio. Arquivos sem finalização não representam o nosso trabalho e não são disponibilizados."},
+  {q:"Como funciona a curadoria de tratamento na seleção?",
+   a:"As provas de seleção são entregues sem edição pesada, apenas com ajuste de cor, para que você avalie as imagens com clareza. É nesse momento que alinhamos o acabamento desejado — por exemplo, pele mais lisa ou mais próxima do natural, com textura — e qualquer preferência específica."},
+  {q:"E se eu não indicar minhas preferências na seleção?",
+   a:"Caso não haja apontamento de preferências no momento da seleção, prevalece o critério técnico e artístico do editor. Pedidos de alteração não comunicados nessa etapa podem gerar cobrança adicional, pois exigem reabrir um processo já finalizado. O aumento de pedidos de edição também precisa de alinhamento prévio com o fotógrafo."},
+  {q:"Posso solicitar alterações após a entrega?",
+   a:"Alterações fora do que foi alinhado na seleção são avaliadas caso a caso e podem implicar custo adicional e novo prazo. Por isso a etapa de curadoria é o momento ideal para registrar todas as suas preferências."},
+  {q:"Como recebo os produtos e a galeria digital?",
+   a:"Os produtos físicos — fotografias impressas, álbuns, quadros e demais itens — são retirados presencialmente no estúdio. A galeria digital é liberada após a conferência dos produtos e a assinatura do comprovante de entrega, garantindo que tudo foi recebido conforme o contratado."},
+  {q:"Por quanto tempo a galeria fica disponível?",
+   a:"A galeria permanece ativa por 90 dias a partir da liberação. Após esse período o acesso é encerrado e um novo envio é orçado à parte, pois a hospedagem em nuvem é um serviço contínuo pago pelo estúdio. Recomendamos baixar os arquivos assim que a galeria for liberada e guardá-los em pelo menos dois locais seguros, como computador e nuvem ou disco externo."},
+  {q:"O valor por imagem muda conforme a quantidade?",
+   a:"Sim, e vale para o total de extras: 1 a 9 fotos, R$ 40 por imagem; 10 a 19, R$ 38; 20 a 29, R$ 35; 30 ou mais, R$ 32. Ao passar de 19 para 20 fotos, por exemplo, todas as extras passam a custar R$ 35 — não apenas as novas."},
+  {q:"Vale mais a pena migrar de plano?",
+   a:"Frequentemente sim. Se você deseja um número maior de imagens, um pacote superior entrega mais fotografias, mais tempo de ensaio e produtos exclusivos por um custo melhor. Consulte antes de fechar as extras — fazemos essa comparação sem custo."},
+  {q:"Contratar extras é um custo ou um investimento?",
+   a:"As extras agregam valor ao que você já contratou: mais detalhes, mais ângulos e mais material para compor quadros e um futuro álbum, tudo no mesmo padrão artístico do ensaio. Em contrapartida, é natural que o prazo aumente, porque há mais imagens passando pelo processo completo de produção."},
+  {q:"Como funciona o direito de imagem?",
+   a:"O uso das imagens, tanto pelo cliente quanto pelo estúdio, segue as permissões e as cláusulas de direito de imagem descritas em contrato. Recomendamos a leitura desses termos antes de qualquer divulgação; dúvidas podem ser esclarecidas diretamente com o fotógrafo."}
+];
+
+const EDICOES = {
+  0:  {label:"Somente o incluso", extra:0},
+  8:  {label:"Tradicional · +R$ 8", extra:8},
+  10: {label:"VIP · +R$ 10", extra:10},
+  20: {label:"Fine Art · +R$ 20", extra:20}
+};
+
+class Component extends DCLogic {
+  state = { qtd: 10, ed: 0, open: {}, theme: "dark" };
+
+  componentDidMount(){
+    let t = "dark";
+    try { t = localStorage.getItem("lumiar-theme") || "dark"; } catch(e){}
+    this.applyTheme(t);
+  }
+
+  applyTheme(t){
+    document.documentElement.setAttribute("data-theme", t);
+    try { localStorage.setItem("lumiar-theme", t); } catch(e){}
+    this.setState({ theme: t });
+  }
+
+  unit(q){ return q >= 30 ? 32 : q >= 20 ? 35 : q >= 10 ? 38 : 40; }
+  faixaNome(q){ return q >= 30 ? "Legado · 30+" : q >= 20 ? "Memórias · 20 a 29" : q >= 10 ? "Essência · 10 a 19" : "Avulsa · 1 a 9"; }
+  prazoTxt(q){ return q >= 20 ? "+14 dias úteis" : q >= 11 ? "+10 dias úteis" : "+7 dias úteis"; }
+  brl(v){ return "R$ " + v.toLocaleString("pt-BR"); }
+
+  edBtn(v){
+    const on = this.state.ed === v;
+    return "width:100%;display:flex;justify-content:space-between;align-items:center;gap:14px;text-align:left;font-family:var(--body-font);font-weight:300;font-size:.94rem;padding:15px 18px;border-radius:15px;cursor:pointer;transition:all .25s ease;"
+      + (on
+        ? "background:var(--pick-bg);border:1px solid var(--pick-border);color:var(--text);box-shadow:inset 0 1px 0 rgba(255,255,255,.16),0 16px 34px -22px rgba(184,148,74,.9);"
+        : "background:var(--tint);border:1px solid var(--line);color:var(--body);");
+  }
+
+  renderVals(){
+    const q = this.state.qtd, ed = EDICOES[this.state.ed];
+    const unit = this.unit(q), finalUnit = unit + ed.extra;
+    const msg = `Olá! Simulei minhas fotografias extras: ${q} fotos, faixa ${this.faixaNome(q)}, ${this.brl(finalUnit)} por imagem` +
+      (ed.extra ? ` (com edição ${ed.label})` : "") + `, total ${this.brl(finalUnit * q)}. Podemos confirmar?`;
+
+    const light = this.state.theme === "light";
+    return {
+      themeLabel: light ? "Modo escuro" : "Modo claro",
+      themeBtnStyle: "display:flex;align-items:center;gap:8px;background:var(--tint);border:1px solid var(--line);color:var(--body);font-family:var(--body-font);font-size:.72rem;letter-spacing:.18em;text-transform:uppercase;padding:11px 18px;border-radius:999px;cursor:pointer;transition:all .25s ease",
+      toggleTheme: () => this.applyTheme(light ? "dark" : "light"),
+      qtd: q,
+      setQtd: e => this.setState({ qtd: Number(e.target.value) }),
+      setQ5: () => this.setState({ qtd: 5 }),
+      setQ10: () => this.setState({ qtd: 10 }),
+      setQ20: () => this.setState({ qtd: 20 }),
+      setQ30: () => this.setState({ qtd: 30 }),
+      setEd0: () => this.setState({ ed: 0 }),
+      setEd8: () => this.setState({ ed: 8 }),
+      setEd10: () => this.setState({ ed: 10 }),
+      setEd20: () => this.setState({ ed: 20 }),
+      edStyle0: this.edBtn(0), edStyle8: this.edBtn(8), edStyle10: this.edBtn(10), edStyle20: this.edBtn(20),
+      faixa: this.faixaNome(q),
+      unitFmt: this.brl(unit),
+      finalUnitFmt: this.brl(finalUnit),
+      edLabel: ed.extra ? ed.label : "—",
+      totalFmt: this.brl(finalUnit * q),
+      prazo: this.prazoTxt(q),
+      waLink: "https://wa.me/5517991278704?text=" + encodeURIComponent(msg),
+      faqs: FAQ.map((f, i) => ({
+        q: f.q, a: f.a,
+        open: !!this.state.open[i],
+        sign: this.state.open[i] ? "–" : "+",
+        toggle: () => this.setState(s => ({ open: Object.assign({}, s.open, { [i]: !s.open[i] }) }))
+      }))
+    };
+  }
+}
+</script>
+</body>
+</html>
